@@ -1,0 +1,261 @@
+<%--
+
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+--%>
+
+
+
+
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
+<%@page import="com.liferay.portal.kernel.util.StringUtil"%>
+<%
+	SyndFeed feed = null;
+	/* try { */
+
+		ObjectValuePair ovp = RSSUtil.getFeed(url);
+
+		feed = (SyndFeed)  ovp.getValue();
+
+		if (Validator.isNull(title)) {
+			title = feed.getTitle();
+		}
+	/* } catch (Exception e) {
+		System.out.println("####### Got Exception " + e.getMessage());
+	} */
+%>
+
+<c:choose>
+	<c:when test="<%= (Validator.isNotNull(url)) && (Validator.isNotNull(feed)) %>">
+		<div>
+
+			<%
+			String baseURL = null;
+			/* System.out.println("####### Got Feed in feed.jsp " + feed); */
+			String feedLink = feed.getLink();
+
+			if (Validator.isNull(feedLink) || !HttpUtil.hasDomain(feedLink)) {
+				baseURL = HttpUtil.getProtocol(url).concat(Http.PROTOCOL_DELIMITER).concat(HttpUtil.getDomain(url));
+
+				if (Validator.isNotNull(feedLink)) {
+					feedLink = baseURL.concat(feedLink);
+				}
+				else {
+					feedLink = baseURL;
+				}
+			}
+			else {
+				baseURL = HttpUtil.getProtocol(feedLink).concat(Http.PROTOCOL_DELIMITER).concat(HttpUtil.getDomain(feedLink));
+			}
+
+			Date publishedDate = feed.getPublishedDate();
+			String description = feed.getDescription();
+
+			SyndImage feedImage = feed.getImage();
+
+			String feedImageLink = StringPool.BLANK;
+			String feedImageURL = StringPool.BLANK;
+
+			if (feedImage != null) {
+				feedImageLink = feedImage.getLink();
+
+				if (!HttpUtil.hasDomain(feedImageLink)) {
+					feedImageLink = baseURL + feedImageLink;
+				}
+
+				feedImageURL = feedImage.getUrl();
+
+				if (!HttpUtil.hasDomain(feedImageURL)) {
+					feedImageURL = baseURL + feedImageURL;
+				}
+			}
+			
+			String formattedPublishedDate = null;
+			if(null != publishedDate) {
+				formattedPublishedDate = dateFormatDateTime.format(publishedDate);
+			}
+			%>
+
+			
+				<%
+				List entries = feed.getEntries();
+
+				for (int j = 0; j < entries.size(); j++) {
+					SyndEntry entry = (SyndEntry)entries.get(j);
+
+					String entryLink = entry.getLink();
+
+					if (Validator.isNotNull(entryLink) && !HttpUtil.hasDomain(entryLink)) {
+						entryLink = baseURL + entryLink;
+					}
+
+					String author = entry.getAuthor();
+
+					SyndContent content = entry.getDescription();
+
+					List contents = new ArrayList();
+
+					if (content == null) {
+						contents = entry.getContents();
+					}
+					else {
+						contents.add(content);
+					}
+
+					List<SyndEnclosure> enclosures = (List<SyndEnclosure>)entry.getEnclosures();
+
+					String enclosureLink = StringPool.BLANK;
+					String enclosureLinkTitle = entry.getTitle();
+
+					for (SyndEnclosure enclosure : enclosures) {
+						if (Validator.isNotNull(enclosure.getUrl())) {
+							enclosureLink = enclosure.getUrl();
+
+							int pos = enclosureLink.lastIndexOf(StringPool.FORWARD_SLASH);
+
+							if (pos > -1) {
+								enclosureLinkTitle = enclosureLink.substring(pos + 1);
+							}
+							else {
+								enclosureLinkTitle = enclosureLink;
+							}
+
+							break;
+						}
+					}
+					
+					String entryPublishedDate = null;
+					if(null != entry.getPublishedDate()) {
+						entryPublishedDate = dateFormatDateTime.format(entry.getPublishedDate());
+					}
+					String publishMonth = "Mon";
+					String publishDay = "Day";
+				
+					if(Validator.isNotNull(entryPublishedDate)) {
+						SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy hh:mm aaa");
+				        Date d = df.parse(entryPublishedDate);
+				        SimpleDateFormat df1 = new SimpleDateFormat("MMM,dd");
+				        String[] dt = df1.format(d).toString().split(",");
+				        publishMonth = dt[0];
+						publishDay = dt[1];
+					
+					} else {
+						publishMonth = " ";
+						publishDay = " ";
+					}
+					/* if(Validator.isNull(entryPublishedDate)) {
+						entryPublishedDate = dateFormatDateTime.format(new Date());
+					} */
+				%>
+					<tr>
+						<td>
+						<table width="100%;">
+							<tr><td> 
+								<c:if test="<%= Validator.isNotNull(entryPublishedDate) %>">
+								<div id="news_date_wrapper"  style="float:left;clear:both;background-color: #f4f4f4; border: 1px solid #f4f4f4;border-radius: 1px; box-shadow: 0 0 10px #fff inset; height: 25px; padding-left: 4px; padding-top: 6px;widh: 72px; z-index: 9999;margin-top: 3px;clear: both;">
+							    <div id="news_month"  style="float:left;transform: rotate(-90deg);transfom-origin: right top 0;font-size: 11px; color: #555;">
+							    <%=publishMonth%>
+							    </div>
+							    <div id="news_date" style="float:left;border-left: 1px solid #ccc;color: #3b73af; font-size: 18px; margin-left: 5px; padding-left: 5px;padding-right: 6px;">
+							    <%=publishDay%>
+							    </div>
+							    </div>
+							    </c:if>
+							</td>
+							</tr>
+							
+							<tr>
+							<td> 
+							<div style="margin-top: -38px;">
+							<div  style="font-size:12px;font-weight:bolder; font-family:helvetica;margin-left: 73px;">
+								<%= HtmlUtil.escape(title) %>: <aui:a href="<%= entryLink %>" target="_blank" style="color:#3b73af;"><%= HtmlUtil.escape(entry.getTitle()) %>  </aui:a></span>
+							</div>
+							<div style="margin-left: 73px;">
+							
+								<%
+								for (int k = 0; k < contents.size(); k++) {
+									content = (SyndContent)contents.get(k);
+	
+									if ((content != null) && Validator.isNotNull(content.getValue())) {
+										String value = StringUtil.replace(
+											content.getValue(),
+											new String[] {
+												"src=\"/",
+												"href=\"/"
+											},
+											new String[] {
+												"src=\"" + baseURL + "/",
+												"href=\"" + baseURL + "/"
+											});
+	
+										String sanitizedValue = null;
+	
+										try {
+											sanitizedValue = SanitizerUtil.sanitize(company.getCompanyId(), scopeGroupId, user.getUserId(), null, 0, ContentTypes.TEXT_HTML, Sanitizer.MODE_XSS, value, null);
+										}
+										catch (SanitizerException se) {
+											sanitizedValue = StringPool.BLANK;
+										} 
+										
+										if(sanitizedValue.length() > 200) {
+									%>
+										
+										<%= StringUtil.shorten(HtmlUtil.stripHtml(sanitizedValue), 200).concat("...") %>
+										
+									<%
+										} else {
+											if(sanitizedValue.contains("img")) {
+									%>
+												<%=sanitizedValue %>
+												<div style="border-bottom: 1px dotted #ccc;"> <!--  --></div>		
+								<%			} else {
+								%>
+												<%=sanitizedValue %>
+								<% 	
+											}
+										}
+								%>
+								<%
+									}
+								}
+								%>
+								
+								</div>
+							</div>
+								<div style="border-bottom: 1px dotted #ccc;"> <!--  --></div>
+							</td>
+							</tr>
+							</table>
+							</td>
+							</tr>
+							
+
+				<%
+					if ((j + 1) >= entriesPerFeed) {
+						break;
+					}
+				}
+				%>
+
+			</div>
+
+			<%-- <c:if test="<%= !last %>">
+				<div class="separator"><!-- --></div>
+			</c:if> --%>
+	</c:when>
+	<%-- <c:otherwise>
+		<div class="alert alert-error">
+			<%= LanguageUtil.format(pageContext, "cannot-be-found", HtmlUtil.escape(urls[i]), false) %>
+		</div>
+	</c:otherwise> --%>
+</c:choose>

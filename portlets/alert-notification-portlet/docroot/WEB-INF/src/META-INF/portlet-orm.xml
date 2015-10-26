@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="com.twelve.capital.model.impl.adminalertModelImpl">
+		<attributes>
+			<id name="alertId" />
+			<basic name="groupId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="location" />
+			<basic name="resolution" />
+			<basic name="expectedResolutionTime">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="resolutionStatus" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="com.twelve.capital.model.impl.adminalertImpl" name="adminalert">
+		<table name="aa_adminalert" />
+		<attributes />
+	</entity>
+</entity-mappings>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.twelve.capital.greetings.service.service.GreetingsMessageLocalService" class="com.twelve.capital.greetings.service.service.impl.GreetingsMessageLocalServiceImpl" />
+	<bean id="com.twelve.capital.greetings.service.service.persistence.GreetingsMessagePersistence" class="com.twelve.capital.greetings.service.service.persistence.GreetingsMessagePersistenceImpl" parent="basePersistence" />
+	<bean id="com.twelve.capital.greetings.service.service.User_StatusLocalService" class="com.twelve.capital.greetings.service.service.impl.User_StatusLocalServiceImpl" />
+	<bean id="com.twelve.capital.greetings.service.service.persistence.User_StatusPersistence" class="com.twelve.capital.greetings.service.service.persistence.User_StatusPersistenceImpl" parent="basePersistence" />
+</beans>

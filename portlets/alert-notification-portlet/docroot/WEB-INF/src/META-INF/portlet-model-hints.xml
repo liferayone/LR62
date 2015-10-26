@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.twelve.capital.model.adminalert">
+		<field name="alertId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="location" type="String" />
+		<field name="resolution" type="String" />
+		<field name="expectedResolutionTime" type="Date" />
+		<field name="resolutionStatus" type="String" />
+	</model>
+</model-hints>

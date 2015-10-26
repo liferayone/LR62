@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.twelve.capital.greetings.service.model.GreetingsMessage">
+		<field name="StatusId" type="long" />
+		<field name="Message" type="String" />
+		<field name="button_color" type="String" />
+	</model>
+	<model name="com.twelve.capital.greetings.service.model.User_Status">
+		<field name="UserId" type="long" />
+		<field name="StatusId" type="long" />
+	</model>
+</model-hints>

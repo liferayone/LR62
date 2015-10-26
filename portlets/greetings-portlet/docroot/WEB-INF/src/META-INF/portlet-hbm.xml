@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="com.twelve.capital.greetings.service.model.GreetingsMessage" />
+	<import class="com.twelve.capital.greetings.service.model.User_Status" />
+	<class name="com.twelve.capital.greetings.service.model.impl.GreetingsMessageImpl" table="greetings_GreetingsMessage">
+		<cache usage="read-write" />
+		<id name="StatusId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="Message" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="button_color" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="com.twelve.capital.greetings.service.model.impl.User_StatusImpl" table="greetings_User_Status">
+		<cache usage="read-write" />
+		<id name="UserId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="StatusId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
+</hibernate-mapping>

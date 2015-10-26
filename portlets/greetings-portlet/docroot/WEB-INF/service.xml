@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="com.twelve.capital.greetings.service">
+	<author>neha.kakkar</author>
+	<namespace>greetings</namespace>
+
+
+  
+	<entity name="GreetingsMessage" local-service="true" remote-service="false">
+	
+	<column name="StatusId" type="long" primary="true"></column>
+	<column name="Message" type="String" ></column>
+	<column name="button_color" type="String"></column>
+	</entity>
+	
+	<entity name="User_Status" local-service="true" remote-service="false">
+	 
+	 <column name="UserId" type="long" primary="true"></column>
+	 <column name="StatusId" type="long"></column>
+	</entity>
+</service-builder>
